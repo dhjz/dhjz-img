@@ -47,20 +47,19 @@
       border: 1px solid #ccc;
       display: inline-block;
       margin-left: 10px;
-      line-height: 26px;
-      padding: 0 10px;
+      line-height: 18px;
+      padding: 4px 10px;
       cursor: pointer;
+    }
+    button span {
+      color: #f33;
+      display: block;
     }
   </style>
 </head>
 <body>
   <h4>根域名: <input type="text" value="" id="rootdm">
-    <button onclick="set(1)">staticaly加速</button>
-    <button onclick="set(2)">gitmirror加速</button>
-    <button onclick="set(3)">jsdelivr加速</button>
-    <button onclick="set(4)">jsdelivr1加速</button>
-    <button onclick="set(5)">kgithub加速</button>
-    <button onclick="set(6)">fastgit加速</button>
+    <div style="display: inline-block;" id="btn-wrap"></div>
   </h4>
   <h3>~400KB:</h3>
   <div class="img-wrap" id="img-wrap">
@@ -75,9 +74,42 @@
     <a href=""></a>
   </div>
   <script>
+    let urls = [
+      { name: 'staticaly加速', url: 'https://cdn.staticaly.com/gh/dhjz/img/master/' },
+      { name: 'gitmirror加速', url: 'https://raw.gitmirror.com/dhjz/img/master/' },
+      { name: 'jsdelivr加速', url: 'https://gcore.jsdelivr.net/gh/dhjz/img@master/' },
+      { name: 'jsdelivr1加速', url: 'https://cdn.jsdelivr.net/gh/dhjz/img/' },
+      { name: 'kgithub加速', url: 'https://raw.kgithub.com/dhjz/img/master/' },
+      { name: 'fastgit加速', url: 'https://raw.fastgit.org/dhjz/img/master/' },
+    ]
+    
+    function initBtn() {
+      let btnEl = document.getElementById('btn-wrap')
+      for (let j = 0; j < urls.length; j++) {
+        const temp = urls[j]
+        const btn = document.createElement('button')
+        btn.innerHTML = temp.name + `<span id="btn${j}"></span>`
+        let ig = new Image()
+        ig.src = temp.url + 'ss/' + Math.ceil(Math.random() * 200) + '.jpg'
+        let start = new Date().getTime()
+        ig.onload = function() {
+          document.getElementById(`btn${j}`).innerHTML = new Date().getTime() - start + 'ms'
+        }
+        ig.onerror = function() {
+          document.getElementById(`btn${j}`).innerHTML = '延迟过高'
+        }
+        btn.onclick = function () {
+          document.getElementById('rootdm').value = temp.url
+          init()
+        }
+        btnEl.append(btn)
+      }
+    }
+    initBtn()
+
     function set(type) {
       let dm = ''
-      if (type == 1) dm ='https://cdn.staticaly.com/gh/dhjz/img/master/'
+      if (type == 1) dm = 'https://cdn.staticaly.com/gh/dhjz/img/master/'
       if (type == 2) dm = 'https://raw.gitmirror.com/dhjz/img/master/'
       if (type == 3) dm = 'https://gcore.jsdelivr.net/gh/dhjz/img@master/'
       if (type == 4) dm = 'https://cdn.jsdelivr.net/gh/dhjz/img/'
