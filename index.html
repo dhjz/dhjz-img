@@ -31,19 +31,37 @@
       height: 120px;
       margin-bottom: 4px;
     }
+    input  {
+      background: #fff;
+      outline: none;
+      line-height: 26px;
+      border: 1px solid #ccc;
+      padding: 0 10px;
+      display: inline-block;
+      min-width: 280px;
+      margin-top: 6px;
+    }
     button {
       outline: none;
       background: none;
       border: 1px solid #ccc;
       display: inline-block;
       margin-left: 10px;
-      line-height: 30px;
+      line-height: 26px;
       padding: 0 10px;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
+  <h4>根域名: <input type="text" value="" id="rootdm">
+    <button onclick="set(1)">staticaly加速</button>
+    <button onclick="set(2)">gitmirror加速</button>
+    <button onclick="set(3)">jsdelivr加速</button>
+    <button onclick="set(4)">jsdelivr1加速</button>
+    <button onclick="set(5)">kgithub加速</button>
+    <button onclick="set(6)">fastgit加速</button>
+  </h4>
   <h3>~400KB:</h3>
   <div class="img-wrap" id="img-wrap">
     <a href=""></a>
@@ -57,29 +75,47 @@
     <a href=""></a>
   </div>
   <script>
-    let wrap = document.getElementById('img-wrap')
-    let ihtml = ''
-    let wraps = document.getElementById('img-wrap-s')
-    let ihtmls = ''
-    let wrapss = document.getElementById('img-wrap-ss')
-    let ihtmlss = ''
-    for (let i = 1; i < 401; i++) {
-      ihtml += `<a target="_blank" href="${i}.jpg">${i}.jpg</a>`
-      ihtmls += `<a target="_blank" href="s/${i}.jpg">${i}.jpg</a>`
-      if (i < 201) ihtmlss += `<a target="_blank" href="ss/${i}.jpg">${i}.jpg</a>`
+    function set(type) {
+      let dm = ''
+      if (type == 1) dm ='https://cdn.staticaly.com/gh/dhjz/img/master/'
+      if (type == 2) dm = 'https://raw.gitmirror.com/dhjz/img/master/'
+      if (type == 3) dm = 'https://gcore.jsdelivr.net/gh/dhjz/img@master/'
+      if (type == 4) dm = 'https://cdn.jsdelivr.net/gh/dhjz/img/'
+      if (type == 5) dm = 'https://raw.kgithub.com/dhjz/img/master/'
+      if (type == 6) dm = 'https://raw.fastgit.org/dhjz/img/master/'
+      document.getElementById('rootdm').value = dm
+      init()
     }
-    wrap.innerHTML = ihtml
-    wraps.innerHTML = ihtmls
-    wrapss.innerHTML = ihtmlss
+    
+    function init() {
+      let rootdm = document.getElementById('rootdm').value || ''
+      let wrap = document.getElementById('img-wrap')
+      let ihtml = ''
+      let wraps = document.getElementById('img-wrap-s')
+      let ihtmls = ''
+      let wrapss = document.getElementById('img-wrap-ss')
+      let ihtmlss = ''
+      for (let i = 1; i < 401; i++) {
+        ihtml += `<a target="_blank" href="${rootdm}${i}.jpg">${i}.jpg</a>`
+        ihtmls += `<a target="_blank" href="${rootdm}s/${i}.jpg">${i}.jpg</a>`
+        if (i < 201) ihtmlss += `<a target="_blank" href="${rootdm}ss/${i}.jpg">${i}.jpg</a>`
+      }
+      wrap.innerHTML = ihtml
+      wraps.innerHTML = ihtmls
+      wrapss.innerHTML = ihtmlss
+    }
+
+    init()
 
     function showImg(type) {
+      let rootdm = document.getElementById('rootdm').value || ''
       let wrap = document.getElementById('img-wrap')
       let ihtml = ''
       if (type == 'ss') {
         wrap = document.getElementById('img-wrap-ss')
       }
       for (let i = 1; i < 201; i++) {
-        ihtml += `<a target="_blank" class="img-a" href="ss/${i}.jpg"><img src="ss/${i}.jpg" />${i}.jpg</a>`
+        ihtml += `<a target="_blank" class="img-a" href="${rootdm}ss/${i}.jpg"><img src="${rootdm}ss/${i}.jpg" />${i}.jpg</a>`
       }
       wrap.innerHTML = ihtml
     }
